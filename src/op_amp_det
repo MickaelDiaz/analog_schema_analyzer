@@ -1,0 +1,27 @@
+from parse import parse_netlist
+from analyzer import find_opamp_amplifier
+
+netlist = [
+    "V1 Vi 0 SINE(0 1 100)",
+    "Vee 0 N003 15",
+    "Vcc N002 0 15",
+    "R2 Vo N001 100k",
+    "R1 N001 Vi 10k",
+    "XU2 0 N001 N002 N003 Vo MAX40078"
+]
+
+components = parse_netlist(netlist)
+amplifiers = find_opamp_amplifier(components)
+
+
+for amp in amplifiers:
+    if amp["type"] == "ampli_inverseur" :
+        print("Circuit détecté : Amplificateur inverseur")
+        print(f"Entrée : {amp['input_node']}")
+        print(f"Sortie : {amp['output_node']}")
+        print(f"Gain théorique : -{amp['r_feedback']['value']}/{amp['r_in_inv']['value']}")
+    elif amp["type"] == "ampli_non_inverseur" :
+        print("Circuit détecté : Amplificateur non inverseur")
+        print(f"Entrée : {amp['input_node']}")
+        print(f"Sortie : {amp['output_node']}")
+        print(f"Gain théorique : 1+{amp['r_feedback']['value']}/{amp['r_inv']['value']}")

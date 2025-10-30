@@ -1,0 +1,10 @@
+V1 Vi 0 SINE(0 1 100)
+Vee 0 N003 15
+Vcc N002 0 15
+R2 Vo N001 100k
+R1 N001 Vi 10k
+XU2 0 N001 N002 N003 Vo MAX40078
+.tran 100m
+.lib MAX40078.lib
+.backanno
+.end
